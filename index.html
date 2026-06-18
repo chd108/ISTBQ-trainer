@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISTQB Lern-Quiz</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --text: #1a2332;
+      --text-muted: #5c6b7a;
+      --border: #dde3ea;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --correct: #059669;
+      --correct-bg: #ecfdf5;
+      --wrong: #dc2626;
+      --wrong-bg: #fef2f2;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 2.5rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 0 0 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    select, .toggle-btn, .number-input {
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    select, .toggle-btn { cursor: pointer; }
+
+    .number-input {
+      width: 5rem;
+      cursor: text;
+    }
+
+    .number-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+
+    .by-id-panel {
+      width: 100%;
+      flex-basis: 100%;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .by-id-error {
+      flex-basis: 100%;
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--wrong);
+    }
+
+    .btn-compact {
+      padding: 0.45rem 0.85rem;
+      font-size: 0.9rem;
+    }
+
+    .toggle-btn {
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .progress {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      padding: 0.6rem 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.1rem;
+    }
+
+    .meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+    }
+
+    .nav-top {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+    }
+
+    .badge.wf { background: #fef3c7; color: #92400e; }
+
+    .question-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin: 0 0 1.1rem;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      font-size: 0.95rem;
+      padding: 0.75rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: #f8fafc;
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    .option-btn .letter {
+      flex-shrink: 0;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 1.2rem;
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent);
+      background: #eff6ff;
+    }
+
+    .option-btn.correct {
+      border-color: var(--correct);
+      background: var(--correct-bg);
+    }
+
+    .option-btn.correct .letter { color: var(--correct); }
+
+    .option-btn.wrong {
+      border-color: var(--wrong);
+      background: var(--wrong-bg);
+    }
+
+    .option-btn.wrong .letter { color: var(--wrong); }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      font-size: 0.925rem;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback.ok {
+      background: var(--correct-bg);
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .feedback.fail {
+      background: var(--wrong-bg);
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .feedback strong { display: block; margin-bottom: 0.35rem; }
+
+    .actions {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.65rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+      .app { padding: 1rem 0.75rem 2rem; }
+      h1 { font-size: 1.2rem; }
+      .question-text { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Lern-Quiz</h1>
+      <div class="controls">
+        <div class="control-group">
+          <label for="level-filter">Level</label>
+          <select id="level-filter" aria-label="Level-Filter">
+            <option value="all">Alle</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Reihenfolge</label>
+          <button type="button" class="toggle-btn active" id="btn-sequential" aria-pressed="true">Der Reihe nach</button>
+          <button type="button" class="toggle-btn" id="btn-random" aria-pressed="false">Zufällig</button>
+          <button type="button" class="toggle-btn" id="btn-by-id" aria-pressed="false">Frage nach Nummer</button>
+        </div>
+        <div class="control-group by-id-panel" id="by-id-panel" hidden>
+          <label for="question-id-input">Fragen-Nr.</label>
+          <input type="number" class="number-input" id="question-id-input" inputmode="numeric" min="1" aria-describedby="by-id-error">
+          <button type="button" class="btn-primary btn-compact" id="btn-show-id">Anzeigen</button>
+          <p class="by-id-error" id="by-id-error" hidden></p>
+        </div>
+      </div>
+    </header>
+
+    <div class="progress" id="progress" hidden>
+      <span id="progress-count">Frage 0 von 0</span>
+      <span id="progress-score">Richtig: 0</span>
+    </div>
+
+    <main class="card" id="quiz-area">
+      <div class="empty-state" id="empty-state">Keine Fragen geladen.</div>
+    </main>
+  </div>
+
+  <script>
+    /* ============================================================
+       HIER NEUE FRAGEN EINFÜGEN
+       Kopiere ein Objekt pro Frage in das Array unten.
+       Felder: id, level (1–5), typ ("mc" oder "wf"),
+               frage, optionen ({ A: "...", B: "...", ... }),
+               loesung ("B" oder mehrere Buchstaben wie "AC"),
+               erklaerung
+       ============================================================ */
+    const fragen = [
+      {
+        id: 1,
+        level: 1,
+        typ: "mc",
+        frage: "Ein Softwareentwicklungsteam hat eine Anwendung entwickelt, die alle funktionalen Anforderungen erfüllt. Nach einer ausführlichen Testphase wird die Anwendung freigegeben. Einige Monate nach der Freigabe berichten Nutzer jedoch über Probleme, die nicht mit Funktionsfehlern zusammenhängen, sondern mit der Benutzerfreundlichkeit und der Leistung der Anwendung. In diesem Zusammenhang, welches Konzept wird durch diese Situation am besten beschrieben?",
+        optionen: { A: "Regressionstests", B: "Absenz-von-Fehlern-Irrtum", C: "Testabdeckung", D: "Fehlerklassifizierung", E: "Defektdichte", F: "Teststrategie" },
+        loesung: "B",
+        erklaerung: "Diese Situation beschreibt den Absenz-von-Fehlern-Irrtum, der auftritt, wenn man annimmt, dass eine Software fehlerfrei ist, nur weil sie alle funktionalen Anforderungen erfüllt. Dieser Irrtum ignoriert andere wichtige Qualitätsmerkmale wie Benutzerfreundlichkeit, Leistung und Wartbarkeit. Auch wenn keine funktionalen Fehler vorhanden sind, kann die Software dennoch unzureichend sein, wenn sie in anderen Aspekten versagt. Es ist entscheidend, dass Tester und Entwickler ein ganzheitliches Verständnis der Softwarequalität haben und nicht nur auf funktionale Fehler achten. Andernfalls könnten sie in die Falle tappen, dass sie glauben, die Software sei „fertig\"."
+      },
+      {
+        id: 2,
+        level: 1,
+        typ: "wf",
+        frage: "Der Absenz-von-Fehlern-Irrtum besagt, dass eine Anwendung als qualitativ hochwertig angesehen wird, wenn sie keine funktionalen Fehler aufweist.",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "B",
+        erklaerung: "Der Absenz-von-Fehlern-Irrtum ist die falsche Annahme, dass eine Anwendung qualitativ hochwertig ist, nur weil keine funktionalen Fehler festgestellt wurden. Qualität umfasst jedoch mehr als nur die Abwesenheit von Fehlern. Faktoren wie Benutzerfreundlichkeit, Leistung, Sicherheit und Wartbarkeit spielen ebenfalls eine entscheidende Rolle. Eine Anwendung kann völlig fehlerfrei im funktionalen Sinne sein, aber dennoch aus Sicht der Nutzer unbrauchbar. Deshalb ist es wichtig, Qualitätsmerkmale ganzheitlich zu betrachten und nicht nur die funktionalen Aspekte zu testen."
+      },
+      {
+        id: 3,
+        level: 1,
+        typ: "mc",
+        frage: "Der Absenz-von-Fehlern-Irrtum kann auftreten, wenn Tester übermäßig auf konzentriert sind, ohne andere Qualitätsmerkmale zu berücksichtigen.",
+        optionen: { A: "Testautomatisierung", B: "funktionale Anforderungen", C: "Usability-Tests", D: "Leistungstests", E: "Exploratives Testen", F: "Sicherheitsprüfungen" },
+        loesung: "B",
+        erklaerung: "Der Absenz-von-Fehlern-Irrtum tritt häufig auf, wenn der Fokus ausschließlich auf die funktionalen Anforderungen gelegt wird, während andere Qualitätsmerkmale vernachlässigt werden. Funktionale Anforderungen sind zwar wichtig, aber nicht die einzigen Faktoren, die die Qualität einer Software bestimmen. Indem Tester den Fokus ausschließlich auf die Erfüllung dieser Anforderungen legen, riskieren sie, wichtige Aspekte wie Benutzerfreundlichkeit, Leistung und Sicherheit zu übersehen. Eine umfassende Teststrategie sollte alle relevanten Qualitätsmerkmale abdecken, um den wahren Wert und die Qualität einer Anwendung zu gewährleisten."
+      },
+      {
+        id: 4,
+        level: 1,
+        typ: "mc",
+        frage: "Welche der folgenden Maßnahmen könnte helfen, den Absenz-von-Fehlern-Irrtum zu vermeiden?",
+        optionen: { A: "Priorisierung der funktionalen Testfälle", B: "Durchführung von Regressionstests", C: "Einbeziehung von nicht-funktionalen Tests", D: "Verwendung von statischen Analysetools", E: "Reduzierung der Testabdeckung", F: "Erhöhung der Testfallanzahl" },
+        loesung: "C",
+        erklaerung: "Die Einbeziehung von nicht-funktionalen Tests ist entscheidend, um den Absenz-von-Fehlern-Irrtum zu vermeiden. Während funktionale Tests sicherstellen, dass die Anwendung das tut, was sie soll, bewerten nicht-funktionale Tests Aspekte wie Leistung, Benutzerfreundlichkeit und Sicherheit. Durch das Testen dieser zusätzlichen Merkmale kann das Team ein umfassenderes Bild der Softwarequalität gewinnen. Ohne diese Tests könnten kritische Probleme übersehen werden, die die Nutzererfahrung beeinträchtigen, auch wenn keine funktionalen Fehler vorhanden sind. Eine ausgewogene Teststrategie sollte daher sowohl funktionale als auch nicht-funktionale Tests umfassen."
+      },
+      {
+        id: 5,
+        level: 1,
+        typ: "mc",
+        frage: "Warum ist es wichtig, über den Absenz-von-Fehlern-Irrtum hinauszudenken, wenn man Softwarequalität beurteilt?",
+        optionen: { A: "Weil funktionale Tests keine Bugs finden", B: "Weil nicht-funktionale Anforderungen oft wichtiger sind", C: "Um sicherzustellen, dass alle Anforderungen erfüllt sind", D: "Weil Benutzerfreundlichkeit allein ausreicht", E: "Weil Software immer fehlerhaft ist", F: "Um die Erwartungen der Stakeholder zu übertreffen" },
+        loesung: "F",
+        erklaerung: "Über den Absenz-von-Fehlern-Irrtum hinauszudenken ist wichtig, um die Erwartungen der Stakeholder zu übertreffen. Stakeholder erwarten nicht nur eine funktionierende Software, sondern auch eine, die zuverlässig, sicher und benutzerfreundlich ist. Indem man über die Abwesenheit von funktionalen Fehlern hinausblickt, kann man sicherstellen, dass alle Aspekte der Softwarequalität berücksichtigt werden. Dies führt zu einer höheren Zufriedenheit bei den Nutzern und verringert das Risiko von Problemen nach der Freigabe. Ein ganzheitlicher Ansatz zur Qualitätssicherung trägt dazu bei, das Vertrauen der Stakeholder in die Software zu stärken."
+      },
+      {
+        id: 6,
+        level: 1,
+        typ: "mc",
+        frage: "Ein Software-Entwicklungsteam arbeitet an einem neuen Kundenmanagementsystem für eine Bank. Das System muss strenge regulatorische Anforderungen erfüllen und soll in einer produktiven Umgebung eingesetzt werden. Bevor das System live geht, wird ein umfassender Akzeptanztest durchgeführt, um sicherzustellen, dass es alle geschäftlichen und technischen Anforderungen erfüllt. Welche der folgenden Tests wäre am besten geeignet, um die Übereinstimmung mit den regulatorischen Anforderungen zu überprüfen?",
+        optionen: { A: "Funktionaler Test", B: "Lasttest", C: "Sicherheitstest", D: "Usability-Test", E: "Regressionstest", F: "Exploratives Testen" },
+        loesung: "C",
+        erklaerung: "Ein Sicherheitstest ist entscheidend, um sicherzustellen, dass das System den regulatorischen Anforderungen entspricht, insbesondere in einer Bank, die strengen Sicherheitsrichtlinien unterliegt. Funktionale Tests überprüfen die Funktionsweise des Systems, während Lasttests die Leistungsfähigkeit unter Druck testen. Usability-Tests konzentrieren sich auf die Benutzerfreundlichkeit, und Regressionstests überprüfen, ob neue Änderungen bestehende Funktionen nicht beeinträchtigen. Exploratives Testen kann nützlich sein, um unvorhergesehene Probleme zu identifizieren, ist jedoch weniger formal. Sicherheitsaspekte stehen im Mittelpunkt regulatorischer Anforderungen, weshalb Sicherheitstests für diese Situation am besten geeignet sind."
+      },
+      {
+        id: 7,
+        level: 1,
+        typ: "wf",
+        frage: "Akzeptanztests werden durchgeführt, um sicherzustellen, dass ein System den geschäftlichen Anforderungen entspricht und einsatzbereit ist.",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "A",
+        erklaerung: "Akzeptanztests sind die letzte Phase des Testprozesses vor der Inbetriebnahme eines Systems. Sie dienen dazu, zu bestätigen, dass das System den vertraglich festgelegten Anforderungen und den Erwartungen der Kunden entspricht. Dabei werden sowohl funktionale als auch nicht-funktionale Anforderungen überprüft, um sicherzustellen, dass das System unter realen Bedingungen zufriedenstellend arbeitet. Die Tests konzentrieren sich auf die Sicht des Endbenutzers und stellen sicher, dass das System einsatzbereit ist und die Geschäftsprozesse effektiv unterstützt."
+      },
+      {
+        id: 8,
+        level: 1,
+        typ: "mc",
+        frage: "Der Zweck des Akzeptanztests besteht darin, sicherzustellen, dass das System bereit ist für die _______.",
+        optionen: { A: "Entwicklung", B: "Integration", C: "Inbetriebnahme", D: "Anforderungsanalyse", E: "Fehlerbehebung", F: "Wartung" },
+        loesung: "C",
+        erklaerung: "Akzeptanztests finden am Ende des Entwicklungszyklus statt und sind entscheidend, um zu bestätigen, dass das System bereit für die Inbetriebnahme ist. Diese Tests gewährleisten, dass das System die festgelegten funktionalen und nicht-funktionalen Anforderungen und die Benutzeranforderungen vollständig abdeckt. Durch die Validierung und Verifizierung der Software wird sichergestellt, dass alle Stakeholder mit dem Endprodukt zufrieden sind und es ohne Bedenken in die produktive Umgebung übernommen werden kann."
+      },
+      {
+        id: 9,
+        level: 1,
+        typ: "mc",
+        frage: "Welches der folgenden ist KEIN Hauptziel von Akzeptanztests?",
+        optionen: { A: "Bestätigen, dass das System die Geschäftsanforderungen erfüllt", B: "Validierung der Benutzerfreundlichkeit des Systems", C: "Sicherstellen, dass das System mit anderen Systemen integriert werden kann", D: "Überprüfung der Systemleistung unter extremen Bedingungen", E: "Identifizieren von kritischen Sicherheitslücken", F: "Beurteilen, ob das System für die Massenproduktion bereit ist" },
+        loesung: "D",
+        erklaerung: "Akzeptanztests konzentrieren sich in erster Linie auf die Überprüfung der Geschäftsanforderungen und die Benutzerakzeptanz. Sie stellen sicher, dass das System die erwarteten Funktionen bereitstellt und die Benutzer- und Geschäftsanforderungen erfüllt. Während die Systemleistung in realistischen Szenarien betrachtet wird, sind spezifische Leistungstests unter extremen Bedingungen eher Teil von Lasttests oder Performance-Tests. Das Ziel der Akzeptanztests ist es nicht, die Systemleistung unter extremen Bedingungen zu überprüfen, sondern sicherzustellen, dass das System für den produktiven Einsatz bereit ist."
+      },
+      {
+        id: 10,
+        level: 1,
+        typ: "mc",
+        frage: "Welche der folgenden Aussagen beschreibt am besten den Umfang von Akzeptanztests?",
+        optionen: { A: "Sie beinhalten ausschließlich funktionale Tests.", B: "Sie konzentrieren sich auf die Integration verschiedener Systeme.", C: "Sie testen die Software in einem isolierten Entwicklungsumfeld.", D: "Sie überprüfen, ob die Software den vertraglichen Anforderungen entspricht.", E: "Sie sind identisch mit den Tests der Qualitätssicherungsabteilung.", F: "Sie werden nur am Ende des Entwicklungszyklus durchgeführt." },
+        loesung: "D",
+        erklaerung: "Akzeptanztests dienen dazu, die Einhaltung der vertraglichen Anforderungen zu überprüfen. Sie stellen sicher, dass die Software bereit ist, in die Produktionsumgebung überführt zu werden, indem sie alle erforderlichen funktionalen und nicht-funktionalen Anforderungen erfüllt. Während funktionale Tests ein Teil davon sind, ist der Umfang von Akzeptanztests breiter und umfasst auch nicht-funktionale Anforderungen und die Benutzerakzeptanz. Sie werden in einer Umgebung durchgeführt, die die reale Einsatzumgebung simuliert, um sicherzustellen, dass das System unter realen Bedingungen funktioniert."
+      },
+      {
+        id: 11,
+        level: 1,
+        typ: "mc",
+        frage: "Ein agiles Entwicklungsteam arbeitet an einem neuen Softwareprojekt. Der Product Owner hat festgestellt, dass die letzten beiden Sprints mehr Fehler als erwartet in der Software verursacht haben. Das Team überlegt nun, wie es seine Teststrategien verbessern kann. Welche der folgenden Praktiken wäre am effektivsten, um die Qualität der Software in zukünftigen Sprints zu erhöhen?",
+        optionen: { A: "Testautomatisierung einführen, um Regressionstests zu unterstützen", B: "Die Sprint-Dauer verlängern, um mehr Zeit für Tests zu haben", C: "Nur manuelle Tests durchführen, um menschliches Urteilsvermögen zu nutzen", D: "Die Anzahl der Entwickler im Team erhöhen", E: "Tests auf das Ende des Sprints verschieben", F: "Auf Tests verzichten und sich auf Benutzerfeedback stützen" },
+        loesung: "A",
+        erklaerung: "Testautomatisierung ist eine der effektivsten Praktiken in agilen Teams, um die Softwarequalität zu verbessern. Durch die Automatisierung von Regressionstests kann das Team sicherstellen, dass neue Änderungen keine bestehenden Funktionen beeinträchtigen. Dies spart nicht nur Zeit, sondern erhöht auch die Zuverlässigkeit der Tests. Während manuelle Tests wichtig sind, um komplexe Szenarien abzudecken, bietet die Automatisierung einen wiederholbaren und konsistenten Ansatz, der Fehler frühzeitig im Entwicklungszyklus aufdeckt. Eine Verlängerung der Sprint-Dauer oder eine Erhöhung der Teamgröße erhöht nicht zwangsläufig die Qualität, sondern kann andere Probleme verursachen. Automatisierte Tests bieten eine nachhaltige Lösung zur Qualitätsverbesserung in agilen Projekten."
+      },
+      {
+        id: 12,
+        level: 1,
+        typ: "wf",
+        frage: "In agilen Projekten ist die Zusammenarbeit zwischen Entwicklern und Testern entscheidend. Wahre oder falsche Aussage: \"In einem agilen Team sind Tester dafür verantwortlich, die entwickelten Funktionen vollständig zu testen, bevor sie an den Kunden ausgeliefert werden.\"",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "B",
+        erklaerung: "In agilen Teams liegt die Verantwortung für die Qualität bei allen Mitgliedern des Teams, nicht nur bei den Testern. Die Tester arbeiten eng mit Entwicklern zusammen, um Testfälle zu entwerfen und zu priorisieren, aber der Fokus liegt auf einer kontinuierlichen Integration und dem Testen während des gesamten Entwicklungsprozesses. Das bedeutet, dass Tester nicht allein für die vollständige Prüfung vor der Auslieferung verantwortlich sind. Vielmehr arbeiten Entwickler und Tester als Einheit, um sicherzustellen, dass die Software kontinuierlich getestet und bereitgestellt wird, was eine schnellere Reaktion auf Veränderungen und eine höhere Flexibilität ermöglicht."
+      }
+    ,
+      {
+        id: 13,
+        level: 1,
+        typ: "mc",
+        frage: "In einem agilen Kontext wird häufig die Methode der \"Explorativen Tests\" verwendet. Diese Art von Test wird am besten beschrieben als: _______.",
+        optionen: { A: "Eine Methode, um Anforderungen in Testfälle zu übersetzen", B: "Ein strukturierter Ansatz, der Testfälle im Voraus plant", C: "Eine informelle Technik, bei der Tester kreativ und intuitiv testen", D: "Ein automatisierter Prozess zur Fehlererkennung", E: "Eine Methode zur Validierung von Benutzerakzeptanztests", F: "Ein Prozess, um Testdaten zu generieren" },
+        loesung: "C",
+        erklaerung: "Exploratives Testen ist eine Technik, die es Testern ermöglicht, kreativ und intuitiv zu testen, ohne im Voraus detaillierte Testfälle zu planen. In einem agilen Umfeld ist diese Flexibilität entscheidend, da sie den Testern erlaubt, auf Änderungen in den Anforderungen oder im Code schnell zu reagieren. Diese Methode fördert ein tiefes Verständnis des Systems und ermöglicht es Testern, unvorhergesehene Probleme oder Schwachstellen effektiv zu identifizieren. Im Gegensatz zu einem streng strukturierten Ansatz bietet exploratives Testen die Möglichkeit, dynamisch auf Entdeckungen und Erkenntnisse zu reagieren, was besonders wertvoll in sich schnell ändernden Projekten ist."
+      },
+      {
+        id: 14,
+        level: 1,
+        typ: "mc",
+        frage: "Welche der folgenden Aussagen trifft am besten auf den Einsatz von Test-Driven Development (TDD) in agilen Projekten zu?",
+        optionen: { A: "TDD erfordert, dass alle Tests vor dem Schreiben des Anwendungscodes bestanden werden", B: "TDD eliminiert die Notwendigkeit von Refactoring im Entwicklungsprozess", C: "TDD ist ein Ansatz, bei dem Tests nach dem Schreiben des Codes erstellt werden", D: "TDD stellt sicher, dass kein Fehler in der Software vorhanden ist", E: "TDD ermöglicht es Entwicklern, Testfälle zu ignorieren, die fehlschlagen könnten", F: "TDD fördert die Entwicklung von Code, der die Spezifikationen genau erfüllt" },
+        loesung: "F",
+        erklaerung: "Test-Driven Development (TDD) ist eine Praxis, die darauf abzielt, den Entwicklungsprozess zu leiten, indem Tests vor dem Schreiben des eigentlichen Anwendungscodes erstellt werden. Dieser Ansatz fördert die Entwicklung von Code, der genau den Spezifikationen entspricht, da er den Entwicklern hilft, sich auf die Anforderungen zu konzentrieren und sicherzustellen, dass jede Codeänderung getestet wird. Obwohl TDD nicht garantiert, dass der Code fehlerfrei ist, verbessert es die Codequalität durch kontinuierliches Refactoring und das frühe Erkennen von Fehlern. TDD trägt dazu bei, eine umfassende Testsuite zu entwickeln, die als Regressionstest fungiert und langfristig die Wartbarkeit und Erweiterbarkeit des Codes verbessert."
+      },
+      {
+        id: 15,
+        level: 1,
+        typ: "mc",
+        frage: "Ein Scrum-Team erlebt regelmäßig Verzögerungen in der Fertigstellung von User Stories. Nach einer Retrospektive beschließt das Team, den \"Definition of Done\" (DoD) zu überarbeiten. Welche der folgenden Änderungen an der DoD könnte die Effektivität und Pünktlichkeit des Teams am wahrscheinlichsten verbessern?",
+        optionen: { A: "DoD verlangt, dass alle Funktionen einen schriftlichen Benutzerleitfaden haben", B: "DoD erfordert, dass alle Codeänderungen von einem Senior Developer genehmigt werden", C: "DoD beinhaltet, dass alle automatisierten Tests erfolgreich abgeschlossen sind", D: "DoD erfordert, dass alle Funktionen eine vollständige Codeüberprüfung durchlaufen", E: "DoD verlangt, dass alle Teammitglieder an den täglichen Stand-ups teilnehmen", F: "DoD erfordert, dass alle Fehlerberichte in der Bug-Datenbank dokumentiert sind" },
+        loesung: "C",
+        erklaerung: "Die Einbeziehung der Anforderung, dass alle automatisierten Tests erfolgreich abgeschlossen sein müssen, bevor eine User Story als \"Done\" betrachtet wird, ist eine entscheidende Verbesserung der Definition of Done. Diese Änderung stellt sicher, dass alle neuen Funktionen vollständig getestet sind und keine bestehenden Funktionen beeinträchtigen. Automatisierte Tests bieten sofortiges Feedback und helfen, Fehler frühzeitig im Entwicklungsprozess zu erkennen und zu beheben. Dies reduziert Verzögerungen und verbessert die Pünktlichkeit, da das Team weniger Zeit damit verbringen muss, nachträglich entdeckte Fehler zu korrigieren. Eine umfassende Testabdeckung ist entscheidend für die Qualitätssicherung und stellt sicher, dass das Produkt den Anforderungen entspricht."
+      },
+      {
+        id: 16,
+        level: 1,
+        typ: "mc",
+        frage: "Ein Softwareentwicklungsunternehmen plant den Einsatz von Alpha- und Beta-Tests für seine neue Anwendung. Das Team hat entschieden, dass die Alpha-Tests intern von den eigenen Entwicklern durchgeführt werden, während die Beta-Tests von einer Gruppe externer Benutzer übernommen werden. Die Anwendung soll in der nächsten Woche veröffentlicht werden, aber es gibt noch einige ungelöste Fehler. Das Management ist besorgt, dass diese Fehler die Benutzererfahrung beeinträchtigen könnten. Welche Testphase ist am besten geeignet, um diese Bedenken vor der Veröffentlichung zu adressieren?",
+        optionen: { A: "Alpha-Test", B: "Beta-Test", C: "Unit-Test", D: "Integrationstest", E: "Systemtest", F: "Abnahmetest" },
+        loesung: "A",
+        erklaerung: "Alpha-Tests sind intern durchgeführte Prüfungen, die darauf abzielen, größere Fehler und Probleme zu identifizieren, bevor das Produkt einer ausgewählten Gruppe externer Benutzer präsentiert wird. Sie bieten Entwicklern die Möglichkeit, Schwachstellen im Produkt zu erkennen und zu beheben, bevor es an die Öffentlichkeit geht. Obwohl Beta-Tests ebenfalls wertvoll sind, um Feedback von echten Benutzern zu sammeln, sind Alpha-Tests entscheidend, um schwerwiegende Fehler frühzeitig zu erkennen und zu beheben. Da das Unternehmen kurz vor der Veröffentlichung steht, ist es ratsam, die Alpha-Tests zu intensivieren, um sicherzustellen, dass die größten Probleme gelöst werden."
+      },
+      {
+        id: 17,
+        level: 1,
+        typ: "wf",
+        frage: "Wahr oder falsch: Beta-Tests werden üblicherweise intern von den Entwicklern des Unternehmens durchgeführt, um die letzten Details der Software zu überprüfen.",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "B",
+        erklaerung: "Beta-Tests werden typischerweise von einer ausgewählten Gruppe externer Benutzer durchgeführt, nicht von den internen Entwicklern. Diese Phase dient dazu, das Produkt in einer realen Umgebung zu testen und Feedback von tatsächlichen Benutzern zu erhalten. Entwicklern fehlen oft die Perspektiven externer Benutzer, die neue und unerwartete Probleme aufdecken können. Die Erkenntnisse aus Beta-Tests sind wertvoll, um die Benutzerfreundlichkeit und Funktionalität der Software vor der endgültigen Veröffentlichung zu verbessern. Intern durchgeführte Tests, wie Unit- oder Integrationstests, dienen anderen Zwecken und finden in früheren Phasen statt."
+      },
+      {
+        id: 18,
+        level: 1,
+        typ: "mc",
+        frage: "Ein wichtiger Bestandteil von Alpha-Tests ist die Durchführung von _______, um sicherzustellen, dass die Software unter verschiedenen Bedingungen stabil läuft.",
+        optionen: { A: "Lasttests", B: "Benutzertests", C: "Systemtests", D: "Oberflächentests", E: "Sicherheitstests", F: "Regressionstests" },
+        loesung: "A",
+        erklaerung: "Lasttests spielen eine entscheidende Rolle in der Alpha-Testphase, insbesondere wenn es darum geht, die Stabilität der Software unter unterschiedlichen Bedingungen zu bewerten. Diese Tests helfen sicherzustellen, dass das System auch unter hoher Benutzerlast oder bei gleichzeitigen Zugriffen stabil bleibt. Während andere Testarten wie Benutzertests oder Sicherheitstests ebenfalls wichtig sind, konzentrieren sich Lasttests speziell auf die Fähigkeit der Software, unter anspruchsvollen Bedingungen zu funktionieren. Diese Art von Tests hilft Entwicklern, Performance-Engpässe und potenzielle Problemstellen zu identifizieren, bevor das Produkt in die Hände externer Tester im Rahmen der Beta-Phase gegeben wird."
+      },
+      {
+        id: 19,
+        level: 1,
+        typ: "mc",
+        frage: "Welche der folgenden Aussagen beschreibt am besten den Zweck von Beta-Tests?",
+        optionen: { A: "Beta-Tests werden durchgeführt, um sicherzustellen, dass alle Unit-Tests erfolgreich sind.", B: "Sie dienen dazu, das Produkt nach der Veröffentlichung zu verbessern.", C: "Beta-Tests werden ausschließlich von internen Entwicklern durchgeführt.", D: "Der Fokus liegt darauf, potenzielle Sicherheitslücken zu identifizieren.", E: "Ziel ist es, Feedback von echten Benutzern zu sammeln, um die Benutzererfahrung zu verbessern.", F: "Sie sind eine Form des automatisierten Testens." },
+        loesung: "E",
+        erklaerung: "Das Hauptziel von Beta-Tests ist es, Feedback von echten Benutzern zu sammeln, um die Benutzererfahrung zu verbessern. Diese Phase der Testung ermöglicht es Entwicklern, Einblicke in die tatsächliche Nutzung des Produkts zu gewinnen und potenzielle Probleme aus der Perspektive der Endnutzer zu identifizieren. Dies unterscheidet sich von internen Tests, die sich oft auf technische Aspekte konzentrieren. Feedback aus Beta-Tests ist entscheidend, um Anpassungen vorzunehmen, die die Benutzerfreundlichkeit und Funktionalität optimieren. Während Sicherheitslücken und andere technische Aspekte auch wichtig sind, ist der primäre Fokus von Beta-Tests die Verbesserung der Endnutzer-Erfahrung."
+      },
+      {
+        id: 20,
+        level: 1,
+        typ: "mc",
+        frage: "Bei der Planung von Alpha-Tests für eine neue Softwareanwendung, welches der folgenden Elemente ist am wenigsten relevant?",
+        optionen: { A: "Auswahl einer geeigneten Gruppe externer Tester", B: "Durchführung von Tests in einer kontrollierten Umgebung", C: "Identifikation kritischer Fehler vor der Beta-Phase", D: "Sicherstellung der Softwarestabilität in der Entwicklungsumgebung", E: "Feedback von internen Entwicklern sammeln", F: "Erstellung detaillierter Testfälle" },
+        loesung: "A",
+        erklaerung: "Die Auswahl einer geeigneten Gruppe externer Tester ist für Alpha-Tests weniger relevant, da diese Tests in erster Linie intern durchgeführt werden. Sie zielen darauf ab, große Fehler und Probleme zu identifizieren und zu beheben, bevor die Software von externen Benutzern im Rahmen von Beta-Tests evaluiert wird. Die anderen Punkte, wie Tests in einer kontrollierten Umgebung, die Sicherstellung der Softwarestabilität und die Erstellung detaillierter Testfälle, sind wesentliche Bestandteile der Alpha-Testphase, um die Software für die nächste Teststufe, den Beta-Test, vorzubereiten. Externe Tester spielen eine größere Rolle in der Beta-Phase."
+      },
+      {
+        id: 21,
+        level: 1,
+        typ: "mc",
+        frage: "Sie arbeiten als Testmanager in einem Softwareentwicklungsprojekt, bei dem agile Methoden eingesetzt werden. Das Team hat Schwierigkeiten, die Testaktivitäten effizient in die kurzen Iterationen zu integrieren. Es gibt wiederkehrende Probleme mit unzureichender Testabdeckung und verspäteten Tests. Welche Vorgehensweise sollten Sie einführen, um die Testprozesse zu verbessern und die Ergebnisse zu optimieren?",
+        optionen: { A: "Einführung von kontinuierlichen Integrations- und Testautomatisierungstools, um die Tests schneller durchzuführen.", B: "Verwendung von Wasserfallmodellen zur besseren Strukturierung der Tests.", C: "Durchführung aller Tests am Ende des Projekts, um Zeit zu sparen.", D: "Ausweitung der Testaktivitäten auf alle Teammitglieder, um die Arbeitslast zu verteilen.", E: "Implementierung eines umfassenden manuellen Testprozesses.", F: "Reduzierung der Testfälle, um das Testen zu beschleunigen." },
+        loesung: "A",
+        erklaerung: "In einem agilen Umfeld ist es entscheidend, dass Testaktivitäten nahtlos in die kurzen Iterationen integriert werden. Die Einführung von kontinuierlichen Integrations- und Testautomatisierungstools ermöglicht es dem Team, Tests schneller und häufiger durchzuführen, was zu einer besseren Testabdeckung führt. Diese Tools helfen dabei, die Tests parallel zur Entwicklung auszuführen und bieten schnelle Rückmeldungen, die es dem Team ermöglichen, Probleme frühzeitig zu erkennen und zu beheben. Diese Vorgehensweise verbessert die Effizienz der Tests und trägt zur Qualitätssicherung im Entwicklungsprozess bei."
+      },
+      {
+        id: 22,
+        level: 1,
+        typ: "wf",
+        frage: "Die Verwendung von Explorativem Testen bietet Vorteile in Bezug auf die Entdeckung von unerwarteten Fehlern und die Flexibilität bei der Testdurchführung. Wahr oder falsch?",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "A",
+        erklaerung: "Exploratives Testen ist eine Technik, die sich besonders gut eignet, um unerwartete Fehler zu entdecken, weil sie nicht strikt an vordefinierte Testfälle gebunden ist. Tester nutzen ihre Erfahrung und Intuition, um das System zu erkunden und potenzielle Schwachstellen zu identifizieren. Diese Flexibilität ermöglicht es, schnell auf neue Informationen zu reagieren und Tests anzupassen, was in dynamischen Entwicklungsumgebungen von großem Vorteil ist. Durch die Freiheit, von geplanten Wegen abzuweichen, kann das Explorative Testen oft Probleme aufdecken, die von standardisierten Tests übersehen werden."
+      },
+      {
+        id: 23,
+        level: 1,
+        typ: "mc",
+        frage: "Ein wichtiger Aspekt des Risikomanagements in einem Testprojekt ist die Priorisierung von Tests basierend auf dem Risiko. Ein effektives Tool, das hierfür eingesetzt werden kann, ist _______.",
+        optionen: { A: "JIRA", B: "Risiko-Matrix", C: "TestLink", D: "Selenium", E: "Jenkins", F: "Cucumber" },
+        loesung: "B",
+        erklaerung: "Die Risiko-Matrix ist ein Werkzeug, das häufig im Risikomanagement eingesetzt wird, um Tests basierend auf ihrer Kritikalität zu priorisieren. Diese Matrix hilft, Risiken zu identifizieren und zu bewerten, indem die Wahrscheinlichkeit eines Fehlers mit den potenziellen Auswirkungen kombiniert wird. Durch die Klassifizierung von Risiken können Testaktivitäten gezielt auf Bereiche mit hoher Priorität konzentriert werden, was zu einer effizienteren Ressourcennutzung führt. Das Verständnis und die Anwendung einer Risiko-Matrix sind entscheidend, um sicherzustellen, dass die riskantesten Teile des Systems zuerst getestet werden."
+      }
+    ];
+    /* ============================================================
+       ENDE FRAGEN-ARRAY – ab hier nichts ändern, außer du
+       möchtest das Verhalten der App anpassen.
+       ============================================================ */
+
+    const state = {
+      levelFilter: "all",
+      orderMode: "sequential",
+      queue: [],
+      index: 0,
+      correctCount: 0,
+      answered: false,
+      selected: new Set(),
+      byIdQuestion: null,
+      answeredMap: {}
+    };
+
+    const els = {
+      levelFilter: document.getElementById("level-filter"),
+      btnSequential: document.getElementById("btn-sequential"),
+      btnRandom: document.getElementById("btn-random"),
+      btnById: document.getElementById("btn-by-id"),
+      byIdPanel: document.getElementById("by-id-panel"),
+      questionIdInput: document.getElementById("question-id-input"),
+      btnShowId: document.getElementById("btn-show-id"),
+      byIdError: document.getElementById("by-id-error"),
+      progress: document.getElementById("progress"),
+      progressCount: document.getElementById("progress-count"),
+      progressScore: document.getElementById("progress-score"),
+      quizArea: document.getElementById("quiz-area")
+    };
+
+    function normalizeSolution(str) {
+      return String(str || "")
+        .toUpperCase()
+        .replace(/[^A-F]/g, "")
+        .split("")
+        .sort()
+        .join("");
+    }
+
+    function pruefeDatenintegritaet() {
+      if (!Array.isArray(fragen)) {
+        console.error("[ISTQB-Quiz] 'fragen' ist kein Array.");
+        return;
+      }
+      const gesehen = new Map();
+      let probleme = 0;
+      fragen.forEach((q, i) => {
+        const pos = "Eintrag #" + (i + 1) + (q && q.id != null ? " (id " + q.id + ")" : "");
+        if (!q || typeof q !== "object") {
+          console.warn("[ISTQB-Quiz] " + pos + ": kein gültiges Objekt."); probleme++; return;
+        }
+        if (q.id == null) { console.warn("[ISTQB-Quiz] " + pos + ": keine id."); probleme++; }
+        else if (gesehen.has(q.id)) { console.warn("[ISTQB-Quiz] DOPPELTE id " + q.id + " (auch Eintrag #" + (gesehen.get(q.id) + 1) + ")."); probleme++; }
+        else { gesehen.set(q.id, i); }
+
+        const keys = q.optionen && typeof q.optionen === "object" ? Object.keys(q.optionen) : [];
+        if (keys.length === 0) { console.warn("[ISTQB-Quiz] " + pos + ": keine Optionen."); probleme++; }
+
+        const sol = normalizeSolution(q.loesung);
+        if (!sol) { console.warn("[ISTQB-Quiz] " + pos + ": leere oder ungültige loesung."); probleme++; }
+        else {
+          sol.split("").forEach(letter => {
+            if (!keys.includes(letter)) { console.warn("[ISTQB-Quiz] " + pos + ": loesung verweist auf Option '" + letter + "', die nicht existiert."); probleme++; }
+          });
+        }
+        if (!q.frage || String(q.frage).trim() === "") { console.warn("[ISTQB-Quiz] " + pos + ": leerer Fragetext."); probleme++; }
+        if (!q.erklaerung || String(q.erklaerung).trim() === "") { console.warn("[ISTQB-Quiz] " + pos + ": keine Erklärung."); probleme++; }
+      });
+      if (probleme === 0) console.info("[ISTQB-Quiz] Datencheck ok: " + fragen.length + " Fragen, keine Probleme gefunden.");
+      else console.warn("[ISTQB-Quiz] Datencheck: " + probleme + " mögliche(s) Problem(e) bei " + fragen.length + " Fragen – siehe oben.");
+    }
+
+    function getOptionKeys(optionen) {
+      if (!optionen || typeof optionen !== "object") return [];
+      return Object.keys(optionen)
+        .filter(k => optionen[k] != null && String(optionen[k]).trim() !== "")
+        .sort();
+    }
+
+    function filterQuestions() {
+      if (!Array.isArray(fragen) || fragen.length === 0) return [];
+      if (state.levelFilter === "all") return fragen.slice();
+      const level = Number(state.levelFilter);
+      return fragen.filter(q => Number(q.level) === level);
+    }
+
+    function shuffle(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function getAvailableIds() {
+      if (!Array.isArray(fragen)) return [];
+      return fragen
+        .map(q => Number(q.id))
+        .filter(n => Number.isInteger(n) && n > 0)
+        .sort((a, b) => a - b);
+    }
+
+    function formatIdRange(ids) {
+      if (!ids.length) return "";
+      if (ids.length === 1) return String(ids[0]);
+      const min = ids[0];
+      const max = ids[ids.length - 1];
+      const contiguous = ids.length === max - min + 1;
+      return contiguous ? min + "–" + max : ids.join(", ");
+    }
+
+    function updateByIdInputHints() {
+      const ids = getAvailableIds();
+      if (!ids.length) {
+        els.questionIdInput.removeAttribute("min");
+        els.questionIdInput.removeAttribute("max");
+        els.questionIdInput.placeholder = "";
+        return;
+      }
+      els.questionIdInput.min = String(ids[0]);
+      els.questionIdInput.max = String(ids[ids.length - 1]);
+      els.questionIdInput.placeholder = formatIdRange(ids);
+    }
+
+    function setByIdError(message) {
+      if (!message) {
+        els.byIdError.hidden = true;
+        els.byIdError.textContent = "";
+        return;
+      }
+      els.byIdError.hidden = false;
+      els.byIdError.textContent = message;
+    }
+
+    function findQuestionById(id) {
+      return fragen.find(q => Number(q.id) === id) || null;
+    }
+
+    function validateQuestionIdInput(raw) {
+      const trimmed = String(raw ?? "").trim();
+      if (!trimmed) {
+        return { valid: false, message: "Bitte eine gültige Fragennummer eingeben." };
+      }
+
+      const num = Number(trimmed);
+      if (!Number.isInteger(num) || num <= 0 || String(num) !== trimmed) {
+        return { valid: false, message: "Bitte eine gültige Fragennummer eingeben." };
+      }
+
+      const question = findQuestionById(num);
+      if (!question) {
+        const ids = getAvailableIds();
+        const hint = ids.length ? " Verfügbar: " + formatIdRange(ids) + "." : "";
+        return { valid: false, message: "Bitte eine gültige Fragennummer eingeben." + hint };
+      }
+
+      return { valid: true, question };
+    }
+
+    function buildQueue() {
+      const filtered = filterQuestions();
+      state.queue = state.orderMode === "random" ? shuffle(filtered) : filtered;
+      state.index = 0;
+      state.correctCount = 0;
+      state.answered = false;
+      state.selected = new Set();
+      state.byIdQuestion = null;
+      state.answeredMap = {};
+    }
+
+    function currentQuestion() {
+      if (state.orderMode === "byId") return state.byIdQuestion;
+      return state.queue[state.index] || null;
+    }
+
+    function isMultiSelect(question) {
+      return normalizeSolution(question.loesung).length > 1;
+    }
+
+    function updateProgress() {
+      if (state.orderMode === "byId") {
+        els.progress.hidden = true;
+        return;
+      }
+
+      const total = state.queue.length;
+      if (total === 0) {
+        els.progress.hidden = true;
+        return;
+      }
+      els.progress.hidden = false;
+      els.progressCount.textContent = "Frage " + (state.index + 1) + " von " + total;
+      els.progressScore.textContent = "Richtig: " + state.correctCount;
+    }
+
+    function answerTypeLabel(question) {
+      return isMultiSelect(question) ? "Mehrfachauswahl" : "Einfachauswahl";
+    }
+
+    function renderEmpty(message) {
+      els.quizArea.innerHTML = '<div class="empty-state">' + escapeHtml(message) + "</div>";
+      els.progress.hidden = true;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderByIdPrompt() {
+      updateProgress();
+      const ids = getAvailableIds();
+      const hint = ids.length
+        ? "Verfügbare Nummern: " + formatIdRange(ids) + "."
+        : "Es sind noch keine Fragen geladen.";
+      els.quizArea.innerHTML =
+        '<div class="empty-state">' +
+        "<p>Gib eine Fragennummer ein und klicke auf „Anzeigen“.</p>" +
+        "<p style='font-size:0.9rem;margin-top:0.5rem'>" + escapeHtml(hint) + "</p>" +
+        "</div>";
+    }
+
+    function jumpToId(id) {
+      const question = findQuestionById(Number(id));
+      if (!question) return;
+      setByIdError("");
+      state.byIdQuestion = question;
+      state.answered = false;
+      state.selected = new Set();
+      els.questionIdInput.value = String(question.id);
+      renderQuestion();
+    }
+
+    function showQuestionById() {
+      const result = validateQuestionIdInput(els.questionIdInput.value);
+      if (!result.valid) {
+        setByIdError(result.message);
+        state.byIdQuestion = null;
+        renderByIdPrompt();
+        return;
+      }
+
+      setByIdError("");
+      state.byIdQuestion = result.question;
+      state.answered = false;
+      state.selected = new Set();
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      if (state.orderMode === "byId" && !state.byIdQuestion) {
+        renderByIdPrompt();
+        return;
+      }
+
+      const q = currentQuestion();
+
+      if (!q) {
+        if (state.orderMode === "byId") {
+          renderByIdPrompt();
+          return;
+        }
+        if (state.queue.length === 0) {
+          const msg = filterQuestions().length === 0 && fragen.length > 0
+            ? "Keine Fragen für dieses Level."
+            : "Keine Fragen geladen.";
+          renderEmpty(msg);
+        } else {
+          renderFinished();
+        }
+        return;
+      }
+
+      state.answered = false;
+      state.selected = new Set();
+      updateProgress();
+
+      const keys = getOptionKeys(q.optionen);
+      const multi = isMultiSelect(q);
+
+      let html = "";
+      html += '<div class="nav-top">';
+      if (state.orderMode === "byId") {
+        const idsTop = getAvailableIds();
+        const posTop = idsTop.indexOf(Number(q.id));
+        const hasPrevTop = posTop > 0;
+        const hasNextTop = posTop > -1 && posTop < idsTop.length - 1;
+        html += '<button type="button" class="toggle-btn" id="btn-prev-id"' + (hasPrevTop ? "" : " disabled") + ">← Vorige</button>";
+        html += '<button type="button" class="toggle-btn" id="btn-next-id"' + (hasNextTop ? "" : " disabled") + ">Nächste →</button>";
+      } else {
+        const hasPrevTop = state.index > 0;
+        html += '<button type="button" class="toggle-btn" id="btn-prev"' + (hasPrevTop ? "" : " disabled") + ">← Vorige</button>";
+        html += '<button type="button" class="toggle-btn" id="btn-next">Nächste →</button>';
+      }
+      html += "</div>";
+      html += '<div class="meta">';
+      html += '<span class="badge">Frage ' + escapeHtml(String(q.id)) + " / " + fragen.length + "</span>";
+      html += '<span class="badge">Level ' + escapeHtml(String(q.level)) + "</span>";
+      html += '<span class="badge' + (multi ? " wf" : "") + '">' + escapeHtml(answerTypeLabel(q)) + "</span>";
+      html += "</div>";
+      html += '<p class="question-text">' + escapeHtml(q.frage) + "</p>";
+      html += '<div class="options" id="options">';
+
+      keys.forEach(letter => {
+        html += '<button type="button" class="option-btn" data-letter="' + letter + '">';
+        html += '<span class="letter">' + letter + ".</span>";
+        html += "<span>" + escapeHtml(String(q.optionen[letter])) + "</span>";
+        html += "</button>";
+      });
+
+      html += "</div>";
+
+      if (multi) {
+        html += '<p class="hint">Mehrere Antworten möglich – alle zutreffenden auswählen, dann prüfen.</p>';
+      }
+
+      html += '<div class="feedback" id="feedback"></div>';
+      html += '<div class="actions">';
+      html += '<button type="button" class="btn-primary" id="btn-check" ' + (multi ? "" : 'hidden disabled') + ">Antwort prüfen</button>";
+      html += "</div>";
+
+      els.quizArea.innerHTML = html;
+
+      const optionBtns = els.quizArea.querySelectorAll(".option-btn");
+      const btnCheck = document.getElementById("btn-check");
+
+      optionBtns.forEach(btn => {
+        btn.addEventListener("click", () => onOptionClick(btn, multi));
+      });
+
+      if (btnCheck) {
+        btnCheck.addEventListener("click", () => evaluateAnswer());
+      }
+
+      if (state.orderMode === "byId") {
+        const ids = getAvailableIds();
+        const pos = ids.indexOf(Number(q.id));
+        const btnPrevId = document.getElementById("btn-prev-id");
+        const btnNextId = document.getElementById("btn-next-id");
+        if (btnPrevId) {
+          btnPrevId.addEventListener("click", () => {
+            if (pos > 0) jumpToId(ids[pos - 1]);
+          });
+        }
+        if (btnNextId) {
+          btnNextId.addEventListener("click", () => {
+            if (pos > -1 && pos < ids.length - 1) jumpToId(ids[pos + 1]);
+          });
+        }
+        els.questionIdInput.value = String(q.id);
+      } else {
+        const btnPrev = document.getElementById("btn-prev");
+        const btnNext = document.getElementById("btn-next");
+        if (btnPrev) {
+          btnPrev.addEventListener("click", () => {
+            if (state.index > 0) {
+              state.index--;
+              renderQuestion();
+            }
+          });
+        }
+        if (btnNext) {
+          btnNext.addEventListener("click", () => {
+            state.index++;
+            renderQuestion();
+          });
+        }
+      }
+
+      restoreAnswerIfAnswered(q);
+    }
+
+    function restoreAnswerIfAnswered(q) {
+      if (state.orderMode === "byId") return;
+      const record = state.answeredMap[q.id];
+      if (!record) return;
+
+      state.answered = true;
+      state.selected = new Set(record.selected);
+
+      const solution = normalizeSolution(q.loesung);
+      const solutionLetters = solution.split("");
+
+      els.quizArea.querySelectorAll(".option-btn").forEach(btn => {
+        const letter = btn.dataset.letter;
+        btn.disabled = true;
+        if (solutionLetters.includes(letter)) {
+          btn.classList.add("correct");
+        } else if (record.selected.includes(letter)) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      const feedback = document.getElementById("feedback");
+      if (feedback) {
+        feedback.classList.add("show", record.correct ? "ok" : "fail");
+        feedback.innerHTML =
+          "<strong>" + (record.correct ? "Richtig!" : "Leider falsch.") + "</strong>" +
+          "<div>Lösung: <strong>" + escapeHtml(solution.split("").join(", ")) + "</strong></div>" +
+          "<div style='margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid rgba(0,0,0,0.08);line-height:1.6'>" + escapeHtml(q.erklaerung || "") + "</div>";
+      }
+
+      const btnCheck = document.getElementById("btn-check");
+      if (btnCheck) btnCheck.hidden = true;
+    }
+
+    function onOptionClick(btn, multi) {
+      if (state.answered) return;
+
+      const letter = btn.dataset.letter;
+
+      if (multi) {
+        if (state.selected.has(letter)) {
+          state.selected.delete(letter);
+          btn.classList.remove("selected");
+        } else {
+          state.selected.add(letter);
+          btn.classList.add("selected");
+        }
+        const btnCheck = document.getElementById("btn-check");
+        if (btnCheck) btnCheck.disabled = state.selected.size === 0;
+      } else {
+        state.selected = new Set([letter]);
+        els.quizArea.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        evaluateAnswer();
+      }
+    }
+
+    function evaluateAnswer() {
+      if (state.answered) return;
+
+      const q = currentQuestion();
+      if (!q || state.selected.size === 0) return;
+
+      state.answered = true;
+
+      const solution = normalizeSolution(q.loesung);
+      const chosen = normalizeSolution(Array.from(state.selected).join(""));
+      const isCorrect = chosen === solution;
+
+      if (state.orderMode !== "byId" && !state.answeredMap[q.id]) {
+        state.answeredMap[q.id] = {
+          selected: Array.from(state.selected),
+          correct: isCorrect
+        };
+        if (isCorrect) state.correctCount++;
+      }
+
+      const solutionLetters = solution.split("");
+
+      els.quizArea.querySelectorAll(".option-btn").forEach(btn => {
+        const letter = btn.dataset.letter;
+        btn.disabled = true;
+        btn.classList.remove("selected");
+
+        if (solutionLetters.includes(letter)) {
+          btn.classList.add("correct");
+        } else if (state.selected.has(letter)) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      const feedback = document.getElementById("feedback");
+      feedback.classList.add("show", isCorrect ? "ok" : "fail");
+      feedback.innerHTML =
+        "<strong>" + (isCorrect ? "Richtig!" : "Leider falsch.") + "</strong>" +
+        "<div>Lösung: <strong>" + escapeHtml(solution.split("").join(", ")) + "</strong></div>" +
+        "<div style='margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid rgba(0,0,0,0.08);line-height:1.6'>" + escapeHtml(q.erklaerung || "") + "</div>";
+
+      const btnCheck = document.getElementById("btn-check");
+      if (btnCheck) btnCheck.hidden = true;
+
+      updateProgress();
+    }
+
+    function renderFinished() {
+      const total = state.queue.length;
+      els.quizArea.innerHTML =
+        '<div class="empty-state">' +
+        "<p><strong>Fertig!</strong></p>" +
+        "<p>Du hast " + state.correctCount + " von " + total + " Fragen richtig beantwortet.</p>" +
+        '<button type="button" class="btn-primary" id="btn-restart" style="margin-top:1rem">Neu starten</button>' +
+        "</div>";
+      els.progressCount.textContent = "Frage " + total + " von " + total;
+      els.progressScore.textContent = "Richtig: " + state.correctCount;
+
+      document.getElementById("btn-restart").addEventListener("click", () => {
+        buildQueue();
+        renderQuestion();
+      });
+    }
+
+    function setOrderMode(mode) {
+      state.orderMode = mode;
+      els.btnSequential.classList.toggle("active", mode === "sequential");
+      els.btnSequential.setAttribute("aria-pressed", String(mode === "sequential"));
+      els.btnRandom.classList.toggle("active", mode === "random");
+      els.btnRandom.setAttribute("aria-pressed", String(mode === "random"));
+      els.btnById.classList.toggle("active", mode === "byId");
+      els.btnById.setAttribute("aria-pressed", String(mode === "byId"));
+      els.byIdPanel.hidden = mode !== "byId";
+
+      if (mode === "byId") {
+        state.byIdQuestion = null;
+        state.answered = false;
+        state.selected = new Set();
+        updateByIdInputHints();
+        setByIdError("");
+        updateProgress();
+        renderByIdPrompt();
+        return;
+      }
+
+      setByIdError("");
+      buildQueue();
+      renderQuestion();
+    }
+
+    els.levelFilter.addEventListener("change", () => {
+      state.levelFilter = els.levelFilter.value;
+      if (state.orderMode === "byId") return;
+      buildQueue();
+      renderQuestion();
+    });
+
+    els.btnSequential.addEventListener("click", () => setOrderMode("sequential"));
+    els.btnRandom.addEventListener("click", () => setOrderMode("random"));
+    els.btnById.addEventListener("click", () => setOrderMode("byId"));
+    els.btnShowId.addEventListener("click", showQuestionById);
+    els.questionIdInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        showQuestionById();
+      }
+    });
+
+    updateByIdInputHints();
+    pruefeDatenintegritaet();
+    buildQueue();
+    renderQuestion();
+  </script>
+</body>
+</html>
