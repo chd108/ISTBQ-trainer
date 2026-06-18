@@ -1203,6 +1203,118 @@
         optionen: { A: "Frühzeitige Erkennung von Integrationsproblemen", B: "Erhöhte Testabdeckung", C: "Reduzierte Notwendigkeit für Benutzerakzeptanztests", D: "Schnellere Feedback-Schleifen", E: "Verbesserte Teamzusammenarbeit", F: "Erhöhte Codequalität" },
         loesung: "C",
         erklaerung: "Continuous Integration und Testautomatisierung bieten viele Vorteile, aber die Reduzierung der Notwendigkeit für Benutzerakzeptanztests gehört nicht dazu. Benutzerakzeptanztests (UAT) sind entscheidend, um sicherzustellen, dass das Produkt den Geschäftsanforderungen entspricht, was durch automatisierte Tests allein nicht erreicht werden kann. CI und Automatisierung konzentrieren sich auf technische Tests und die frühzeitige Erkennung von Fehlern im Code. Während sie die Effizienz und die Codequalität erhöhen, bleiben UAT ein kritischer Teil des Testprozesses, um die funktionalen und geschäftlichen Anforderungen zu validieren."
+      },      {
+        id: 101,
+        level: 2,
+        typ: "mc",
+        frage: "Ein Softwareentwicklungsteam verwendet ein Tool zur Messung der Anweisungsabdeckung, um die Qualität seines Codes zu verbessern. Nach mehreren Testläufen stellt das Team fest, dass die Abdeckung 75% beträgt. Das Team möchte die Abdeckung erhöhen, um die Wahrscheinlichkeit von Fehlern im Code zu verringern. Welche der folgenden Maßnahmen könnte dem Team helfen, die Anweisungsabdeckung zu verbessern?",
+        optionen: { A: "Hinzufügen von mehr Unit-Tests, die nicht getestete Anweisungen abdecken", B: "Entfernen von nicht getesteten Anweisungen aus dem Code", C: "Erhöhen der Anzahl der automatisierten Tests, ohne die Abdeckung zu berücksichtigen", D: "Umstrukturierung des Codes, um die Komplexität zu reduzieren", E: "Verwendung eines Tools zur Messung der Zweigabdeckung anstelle der Anweisungsabdeckung", F: "Reduzierung der Testumgebungen, um die Tests schneller durchzuführen" },
+        loesung: "A",
+        erklaerung: "Um die Anweisungsabdeckung zu verbessern, ist es entscheidend, Tests zu entwickeln, die die bisher nicht getesteten Anweisungen im Code abdecken. Das Hinzufügen von Unit-Tests, die sich gezielt auf diese Anweisungen konzentrieren, wird die Abdeckung erhöhen. Während das Entfernen von Anweisungen oder die Umstrukturierung des Codes nützlich sein kann, um die Codequalität zu verbessern, erhöht dies nicht direkt die Abdeckung. Die Verwendung eines anderen Abdeckungstyps ändert nicht die Anweisungsabdeckung. Das Ziel sollte sein, sicherzustellen, dass alle Anweisungen mindestens einmal ausgeführt werden, um potenzielle Fehler aufzudecken und die Codequalität zu verbessern."
+      },      {
+        id: 102,
+        level: 2,
+        typ: "wf",
+        frage: "Ein Abdeckungswerkzeug misst die Anzahl der durchgeführten Tests und vergleicht diese mit der Gesamtheit der im Code vorhandenen Anweisungen. Wahr oder falsch: Dieses Werkzeug misst die Zweigabdeckung.",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "B",
+        erklaerung: "Die Beschreibung des Werkzeugs bezieht sich auf die Anweisungsabdeckung, nicht auf die Zweigabdeckung. Die Anweisungsabdeckung misst, wie viele der vorhandenen Anweisungen im Code durch Tests ausgeführt werden. Im Gegensatz dazu misst die Zweigabdeckung, ob alle möglichen Pfade oder Zweige in der Codeausführung getestet wurden. Die Zweigabdeckung ist umfassender, da sie auch die Bedingungen innerhalb des Codes berücksichtigt, die zu möglichen Variationen in der Ablaufkontrolle führen. Ein Werkzeug, das nur Anweisungen berücksichtigt, kann nicht die vollständige Zweigabdeckung bestimmen."
+      },      {
+        id: 103,
+        level: 2,
+        typ: "mc",
+        frage: "Ein Tool zur Messung der Testabdeckung erfasst, wie viele der im Code vorhandenen _______ ausgeführt wurden, um sicherzustellen, dass alle möglichen Zweige getestet werden.",
+        optionen: { A: "Anweisungen", B: "Schleifen", C: "Klassen", D: "Bedingungen", E: "Methoden", F: "Pakete" },
+        loesung: "D",
+        erklaerung: "Um sicherzustellen, dass alle möglichen Zweige im Code getestet werden, muss die Bedingungsabdeckung gemessen werden. Bedingungsausdrücke bestimmen, welche Zweige im Code ausgeführt werden, und daher ist die Messung der Bedingungsabdeckung entscheidend für die Erfassung aller möglichen Ausführungspfade. Während Anweisungen, Schleifen, Klassen, Methoden und Pakete auch für die Codeabdeckung wichtig sind, konzentriert sich die Zweigabdeckung speziell auf die Bedingungen, die den Kontrollfluss innerhalb des Codes beeinflussen. Ohne die vollständige Bedingungsabdeckung könnten einige Zweige niemals getestet werden, was das Risiko von unentdeckten Fehlern erhöht."
+      },      {
+        id: 104,
+        level: 2,
+        typ: "mc",
+        frage: "Welche der folgenden Aussagen beschreibt am besten die Funktion eines Abdeckungsanalyse-Tools?",
+        optionen: { A: "Es optimiert die Codeleistung, indem es ineffiziente Anweisungen identifiziert.", B: "Es verringert die Anzahl der erforderlichen Tests, indem es unnötige Tests entfernt.", C: "Es bewertet die Qualität der Tests, indem es die Abdeckung der Codebasis misst.", D: "Es verbessert die Code-Sicherheit, indem es Sicherheitslücken aufdeckt.", E: "Es führt automatisch alle Unit-Tests für den Code aus.", F: "Es generiert detaillierte Fehlerberichte für alle Codefehler." },
+        loesung: "C",
+        erklaerung: "Ein Abdeckungsanalyse-Tool wird verwendet, um die Qualität der Tests zu bewerten, indem es misst, wie viel der Codebasis durch bestehende Tests abgedeckt ist. Es zeigt auf, welche Teile des Codes getestet werden und welche nicht, was Entwicklern ermöglicht, gezielt zusätzliche Tests zu erstellen, um die Abdeckung zu maximieren. Im Gegensatz zu Leistungsoptimierung und Sicherheitsüberprüfung konzentriert sich das Abdeckungsanalyse-Tool darauf, die Testeffizienz zu verbessern und sicherzustellen, dass alle relevanten Teile des Codes getestet wurden. Dies trägt zu einer höheren Codequalität und Zuverlässigkeit bei."
+      },      {
+        id: 105,
+        level: 2,
+        typ: "mc",
+        frage: "Bei der Durchführung einer Codeüberprüfung stellt ein Team fest, dass mehrere Zweige nicht von Tests abgedeckt werden. Welche der folgenden Aktionen kann die Situation verbessern?",
+        optionen: { A: "Einführen von Stress-Tests, um die Leistung zu maximieren", B: "Schreiben von spezifischen Tests, um die fehlenden Zweige abzudecken", C: "Reduzieren der Komplexität des Codes durch Refactoring", D: "Verwenden eines Tools zur statischen Code-Analyse", E: "Wechsel zu einem anderen Code-Coverage-Tool", F: "Automatisierung der Erstellung von Testdaten" },
+        loesung: "B",
+        erklaerung: "Das Schreiben von spezifischen Tests, die sich auf die fehlenden Zweige konzentrieren, ist der effektivste Weg, um die Abdeckung dieser Zweige zu gewährleisten. Indem gezielte Tests entwickelt werden, die die Bedingungen und Pfade abdecken, die bisher nicht getestet wurden, kann das Team sicherstellen, dass alle möglichen Ausführungspfade überprüft werden. Während andere Maßnahmen wie Refactoring oder statische Code-Analyse zur Verbesserung der Codequalität beitragen können, stellen sie nicht sicher, dass die Abdeckung der Zweige erhöht wird. Ein gezielter Testansatz ermöglicht es, die Abdeckungslücken zu schließen und die Zuverlässigkeit des Codes zu erhöhen."
+      },      {
+        id: 106,
+        level: 2,
+        typ: "mc",
+        frage: "Ein Softwareentwicklungsunternehmen hat kürzlich ein neues Modul entwickelt und möchte sicherstellen, dass es umfassend getestet wurde. Der Testmanager beschließt, die Anweisungsüberdeckung zu verwenden, um den Testfortschritt zu messen. Nach dem Testen gibt der Bericht an, dass 85 % der Anweisungen abgedeckt wurden. Was bedeutet dies für das Testteam?",
+        optionen: { A: "Alle Anweisungen im Code wurden getestet.", B: "85 % der Anweisungen im Code wurden mindestens einmal ausgeführt.", C: "85 % der möglichen Testfälle wurden ausgeführt.", D: "85 % der Anweisungsabdeckung ist gleichbedeutend mit 85 % Zweigabdeckung.", E: "15 % des Codes sind fehlerhaft.", F: "85 % der Anforderungen sind erfüllt." },
+        loesung: "B",
+        erklaerung: "Anweisungsüberdeckung bezieht sich darauf, wie viele der geschriebenen Codeanweisungen während des Testvorgangs mindestens einmal ausgeführt wurden. Ein Prozentsatz von 85 % bedeutet, dass 85 % der Anweisungen mindestens einmal getestet wurden. Es gibt jedoch keine Garantie, dass alle Pfade oder Zweige im Code getestet wurden, da dies eine separate Metrik, bekannt als Zweigabdeckung, erfordert. Anweisungsüberdeckung ist eine grundlegende Ebene der Testabdeckung und stellt sicher, dass der Code ausgeführt, aber nicht unbedingt vollständig getestet wurde."
+      },      {
+        id: 107,
+        level: 2,
+        typ: "wf",
+        frage: "Stimmt es, dass die Verwendung der Zweigabdeckung allein ausreicht, um alle Logikfehler in einem Programm zu finden?",
+        optionen: { A: "Ja", B: "Nein" },
+        loesung: "B",
+        erklaerung: "Zweigabdeckung stellt sicher, dass jeder mögliche Pfad durch den Code mindestens einmal getestet wurde, indem es alle Entscheidungen in einem Code überprüft. Obwohl dies hilft, viele Logikfehler zu identifizieren, garantiert es nicht das Auffinden aller Fehler. Einige Logikfehler können nur durch eine vollständige Pfadüberdeckung oder durch spezifische Testfälle identifiziert werden, die auf logischen Annahmen basieren. Daher ist die Zweigabdeckung allein nicht ausreichend, um sicherzustellen, dass ein Programm frei von Logikfehlern ist. Eine Kombination von verschiedenen Testmethoden ist notwendig, um eine umfassendere Fehlerabdeckung zu erreichen."
+      },      {
+        id: 108,
+        level: 2,
+        typ: "mc",
+        frage: "Die Anweisungsüberdeckung ist eine Form der Testabdeckung, die sich auf den Prozentsatz der ausgeführten Anweisungen während des Testens bezieht. Welche andere Testabdeckungsmethode wird hauptsächlich verwendet, um sicherzustellen, dass alle Entscheidungszweige in einem Code getestet werden, und wird als _______ bezeichnet.",
+        optionen: { A: "Anweisungsüberdeckung", B: "Codeüberdeckung", C: "Zweigabdeckung", D: "Pfadüberdeckung", E: "Bedingungsüberdeckung", F: "Modulüberdeckung" },
+        loesung: "C",
+        erklaerung: "Zweigabdeckung wird verwendet, um sicherzustellen, dass alle möglichen Entscheidungszweige in einem Code getestet werden. Dies bedeutet, dass jede Entscheidung im Code, wie z.B. \"if\" oder \"switch\" Anweisungen, sowohl wahr als auch falsch getestet wird. Im Vergleich zur Anweisungsüberdeckung, die nur testet, ob jede Anweisung ausgeführt wurde, erweitert die Zweigabdeckung die Testtiefe, indem sie Logikpfade betrachtet. Sie hilft dabei, Logikfehler aufzudecken, die durch ungetestete Zweige verursacht werden können, und ist daher ein wichtiger Bestandteil einer umfassenden Teststrategie."
+      },      {
+        id: 109,
+        level: 2,
+        typ: "mc",
+        frage: "Ein Testteam verwendet verschiedene Metriken, um die Testabdeckung zu bewerten. Welche der folgenden Metriken würde dem Team helfen, die kombinierte Logik in zusammengesetzten Bedingungen zu überprüfen?",
+        optionen: { A: "Anweisungsüberdeckung", B: "Zweigabdeckung", C: "Pfadüberdeckung", D: "Bedingungsüberdeckung", E: "Mehrfache Bedingungsüberdeckung", F: "Entscheidungsüberdeckung" },
+        loesung: "E",
+        erklaerung: "Mehrfache Bedingungsüberdeckung ist eine Metrik, die sich auf die Überprüfung der kombinierten Logik in zusammengesetzten Bedingungen konzentriert. Sie stellt sicher, dass alle möglichen Kombinationen von Bedingungsergebnissen innerhalb zusammengesetzter Bedingungen getestet werden. Dies ist entscheidend, um sicherzustellen, dass komplexe logische Ausdrücke korrekt funktionieren, da einfache Bedingungsüberdeckung möglicherweise nicht alle möglichen Kombinationen abdecken kann. Durch die Verwendung dieser Metrik können subtilere Logikfehler identifiziert werden, die bei anderen Testabdeckungstechniken möglicherweise unentdeckt bleiben."
+      },      {
+        id: 110,
+        level: 2,
+        typ: "mc",
+        frage: "Während eines Projekts verwendet ein Testteam Pfadüberdeckung, um die Testabdeckung zu maximieren. Welche der folgenden Aussagen trifft am besten auf die Pfadüberdeckung zu?",
+        optionen: { A: "Sie ist identisch mit der Anweisungsüberdeckung.", B: "Sie erfordert das Testen aller möglichen Pfade durch das Programm.", C: "Sie ist weniger umfassend als die Zweigabdeckung.", D: "Sie ignoriert Schleifen im Code.", E: "Sie ist nur bei einfachen Programmen anwendbar.", F: "Sie testet nur die Hauptpfade eines Programms." },
+        loesung: "B",
+        erklaerung: "Pfadüberdeckung bezieht sich auf das Testen aller möglichen Ausführungspfade durch ein Programm. Dies umfasst alle Kombinationen von Anweisungen und Entscheidungen, einschließlich Schleifen und verschachtelten Bedingungen. Da die Anzahl der Pfade in komplexen Programmen exponentiell ansteigen kann, ist die vollständige Pfadüberdeckung in der Praxis oft schwierig zu erreichen. Dennoch bietet sie die umfassendste Abdeckung, da sie sicherstellt, dass jede mögliche Ausführung des Programms getestet wurde. Solch ein rigoroses Testen hilft, potenzielle Fehler in den verschiedenen logischen Pfadkombinationen des Programms zu identifizieren."
+      },      {
+        id: 111,
+        level: 2,
+        typ: "mc",
+        frage: "In einem Softwareprojekt, bei dem die Testabdeckung durch Entscheidungsmessung überwacht wird, ergibt die Analyse des Testberichts, dass die aktuelle Entscheidungsmessung bei 75 % liegt. Das Projekt hat 100 Entscheidungspunkte, von denen 25 noch nicht getestet wurden. Ein Teammitglied schlägt vor, sich auf die verbleibenden ungetesteten Entscheidungspunkte zu konzentrieren, um eine höhere Abdeckung zu erreichen. Welche Abdeckung wäre zu erwarten, wenn alle verbleibenden Entscheidungspunkte erfolgreich getestet werden?",
+        optionen: { A: "100 %", B: "85 %", C: "90 %", D: "80 %", E: "95 %", F: "75 %" },
+        loesung: "A",
+        erklaerung: "Wenn alle ungetesteten Entscheidungspunkte erfolgreich getestet werden, würde die Entscheidungsmessung auf 100 % steigen. Dies liegt daran, dass die Entscheidungsmessung das Verhältnis der getesteten Entscheidungspunkte zu allen vorhandenen Entscheidungspunkten angibt. Da es insgesamt 100 Entscheidungspunkte gibt und 75 bereits getestet sind, verbleiben 25, die noch getestet werden müssen. Durch das erfolgreiche Testen dieser 25 Entscheidungen wird die Abdeckung auf 100 % gebracht, da dann alle Entscheidungspunkte im Code abgedeckt sind."
+      },      {
+        id: 112,
+        level: 2,
+        typ: "wf",
+        frage: "Beim Messen der Entscheidungsmessung wird nur überprüft, ob alle möglichen Ergebnisse einer Entscheidung mindestens einmal getestet wurden.",
+        optionen: { A: "Wahr", B: "Falsch" },
+        loesung: "A",
+        erklaerung: "Die Entscheidungsmessung ist darauf ausgelegt, sicherzustellen, dass alle möglichen Ergebnisse jeder Entscheidung im Code mindestens einmal getestet werden. Dies bedeutet, dass nicht nur die Bedingungen selbst, sondern auch jede Möglichkeit, die sich aus dem Auswerten dieser Bedingungen ergibt, abgedeckt werden muss. Diese umfassende Herangehensweise hilft, die Qualität und Zuverlässigkeit der Tests zu verbessern, indem sie sicherstellt, dass alle Logikpfade durchlaufen wurden. Daher ist die Aussage, dass die Entscheidungsmessung überprüft, ob alle möglichen Ergebnisse getestet wurden, wahr."
+      },      {
+        id: 113,
+        level: 2,
+        typ: "mc",
+        frage: "Die Entscheidungsmessung ist eine Art von _______.",
+        optionen: { A: "Anforderungsanalyse", B: "dynamischer Testtechnik", C: "statischer Testtechnik", D: "Testvorgehensweise", E: "Testmanagement", F: "Testfallentwurfsmethode" },
+        loesung: "B",
+        erklaerung: "Die Entscheidungsmessung gehört zu den dynamischen Testtechniken, da sie sich mit der Ausführung von Code befasst, um die Abdeckung zu messen. Im Gegensatz zu statischen Testtechniken, die ohne Ausführung des Codes arbeiten, erfordert die Entscheidungsmessung tatsächliche Testläufe, um festzustellen, ob alle Entscheidungsergebnisse berücksichtigt wurden. Diese Technik hilft dabei, sicherzustellen, dass alle Logikzweige durchlaufen werden, was für die Qualitätssicherung von entscheidender Bedeutung ist. Daher ist die Zuordnung zur dynamischen Testtechnik korrekt."
+      },      {
+        id: 114,
+        level: 2,
+        typ: "mc",
+        frage: "Welche der folgenden Aussagen beschreibt am besten die Entscheidungsmessung?",
+        optionen: { A: "Sie misst die Anzahl der Anweisungen, die während eines Tests ausgeführt werden.", B: "Sie überprüft, ob alle möglichen Entscheidungszweige getestet wurden.", C: "Sie erfordert die Analyse aller möglichen Eingabekombinationen.", D: "Sie stellt sicher, dass alle Bedingungsergebnisse in einer Entscheidung abgedeckt sind.", E: "Sie bewertet die Performanz des getesteten Systems.", F: "Sie misst die Anzahl der Fehler im Code." },
+        loesung: "B",
+        erklaerung: "Entscheidungsmessung zielt darauf ab, alle möglichen Entscheidungszweige in einem Programm zu testen. Dies bedeutet, dass jede logische Entscheidung im Code in all ihren möglichen Ausgängen betrachtet werden muss. Durch diese umfassende Betrachtung wird sichergestellt, dass alle möglichen Pfade durch den Code abgedeckt sind, was die Wahrscheinlichkeit verringert, dass ungetestete Entscheidungszweige Fehler enthalten. Daher ist die Aussage, dass die Entscheidungsmessung überprüft, ob alle Entscheidungszweige getestet wurden, die zutreffendste Beschreibung."
       }
     ];
     /* ============================================================
